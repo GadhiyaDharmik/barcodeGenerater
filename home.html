@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Barcode on image</title>
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <!-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <!-- <script src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <style>
+        body {
+            overflow-y: hidden;
+        }
+
+        #main-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #form-container {
+            width: 30%;
+        }
+
+        #input-fluid {
+            max-width: 80%;
+        }
+
+        #barcode {
+            position: relative;
+            height: auto;
+            width: 50%;
+        }
+
+        #barcode1 {
+            position: relative;
+            height: auto;
+            width: 50%;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <h1>Upload Image</h1>
+                <input type="file" id="input-img" class="img-fluid form-control mb-3">
+                <input type="text" placeholder="AWB" id="br-no" class="form-control mb-3">
+                <input type="text" placeholder="Order Id" id="br-no2" class="form-control mb-3">
+                <button onclick="generate()" class="btn btn-primary mb-3 w-100">Generate Barcode</button>
+                <div class="row">
+                    <!-- <div class="col-md-6">
+                        <img id="barcode"></img>
+                    </div>
+                    <div class="col-md-6">
+                        <img id="barcode1"></img>
+                    </div><br> -->
+                    <div class="col-md-12">
+                        <button onclick="downloadPDF()" class="btn btn-success mb-3 w-100">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="maindiv" class="aaaaaaa">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <img src="test.jpg" id="image" class="img-fluid">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img id="barcode"></img>
+                                </div>
+                                <div class="col-md-12">
+                                    <img id="barcode1"></img>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <!-- Generate Barcode -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+    <script>
+        function downloadPDF() {
+            // Use html2canvas to capture the content of the barcode div and images
+            html2canvas(document.getElementById("maindiv")).then(function (canvas) {
+                var imgData = canvas.toDataURL('image/png');
+
+                // Initialize jsPDF
+                var pdf = new jsPDF('p', 'mm', 'a4');
+                var width = 350;
+                var height = 350;
+
+                // Add captured content as an image in the PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, width - 20, height - 20);
+
+                // Save the PDF file
+                pdf.save('output.pdf');
+            });
+        }
+
+        JsBarcode("#barcode", "#Hello", {
+            background: "#ffffff",
+            lineColor: "#000000"
+        });
+        JsBarcode("#barcode1", "#Hello", {
+            background: "#ffffff",
+            lineColor: "#000000"
+        });
+        JsBarcode("#barcode3", "#Hello", {
+            background: "#ffffff",
+            lineColor: "#000000"
+        });
+        JsBarcode("#barcode2", "#Hello", {
+            background: "#ffffff",
+            lineColor: "#000000"
+        });
+
+        function generate() {
+
+            var val = document.getElementById("br-no").value;
+            if (val == "") {
+                val = "Hello!"
+            }
+            JsBarcode("#barcode", val, {
+                background: "#ffffff",
+                lineColor: "#000000"
+            });
+            JsBarcode("#barcode2", val, {
+                background: "#ffffff",
+                lineColor: "#000000"
+            });
+
+            var val = document.getElementById("br-no2").value;
+            if (val == "") {
+                val = "Hello!"
+            }
+            JsBarcode("#barcode1", val, {
+                background: "#ffffff",
+                lineColor: "#000000"
+            });
+            JsBarcode("#barcode3", val, {
+                background: "#ffffff",
+                lineColor: "#000000"
+            });
+
+        }
+    </script>
+
+    <!-- drag image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/draggabilly/3.0.0/draggabilly.pkgd.min.js"></script>
+    <script>
+        let el = document.getElementById("barcode");
+        let drag = new Draggabilly(el);
+        let el1 = document.getElementById("barcode1");
+        let drag1 = new Draggabilly(el1);
+    </script>
+
+    <script type="text/javascript">
+
+        let image = document.getElementById("image");
+        let input_img = document.getElementById("input-img");
+
+        input_img.onchange = function () {
+            image.src = URL.createObjectURL(input_img.files[0]);
+        }
+
+    </script>
+</body>
+
+</html>
